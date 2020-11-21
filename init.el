@@ -49,7 +49,7 @@
 		     (convert-standard-filename "lisp/")))
 
 ;;; fira
-;;; https://github.com/johnw42/fira-code-emacs.gi
+;;; https://github.com/johnw42/fira-code-emacs.git
 (use-package dash)
 (require 'fira-code)
 (add-hook 'prog-mode-hook 'fira-code-mode)
@@ -160,7 +160,10 @@
 ;;; selectrum
 (use-package selectrum
   :config
-  (selectrum-mode +1)
+  (selectrum-mode +1))
+
+(use-package selectrum-prescient
+  :config
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1))
 
@@ -169,9 +172,6 @@
   :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
-
-;;; The rest of the world
-(require 'platform-mode)
 
 (use-package zygospore
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)
@@ -257,8 +257,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(compilation-scroll-output t)
- '(package-selected-packages
-   '(selectrum window-purpose persp-projectile pyvenv howdoyou lolcat ag terminal-toggle web-mode modern-cpp-font-lock company-tern zygospore yasnippet ws-butler use-package undo-tree tern projectile paradox magit ido-completing-read+ git-walktree git-timemachine git-messenger flycheck fira-code-mode esh-autosuggest column-enforce-mode clean-aindent-mode bury-successful-compilation bifocal auto-compile anzu))
  '(ring-bell-function 'ignore))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
