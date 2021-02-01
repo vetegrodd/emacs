@@ -49,18 +49,16 @@
 		     (convert-standard-filename "lisp/")))
 
 ;;; fira
-;;; https://github.com/johnw42/fira-code-emacs.git
-(use-package dash)
-(require 'fira-code)
-(add-hook 'prog-mode-hook 'fira-code-mode)
+(use-package fira-code-mode
+  :config (global-fira-code-mode))
 
 (set-face-attribute 'default nil
-                    :family "Fira Emacs Retina"
-                    :height 80
-                    :weight 'normal
-                    :width 'normal
-  		    :slant 'normal)
-(set-frame-font  "Fira Emacs Retina" nil t)
+                     :family "Fira Code Retina"
+                     :height 80
+                     :weight 'normal
+                     :width 'normal
+   		    :slant 'normal)
+(set-frame-font "Fira Code Retina" nil t)
 
 ;; EXWM
 (if (string= (getenv "EXWM") "true")
@@ -257,6 +255,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(compilation-scroll-output t)
+ '(package-selected-packages
+   '(zygospore yasnippet ws-butler window-purpose web-mode use-package undo-tree terminal-toggle selectrum-prescient pyvenv persp-projectile paradox modern-cpp-font-lock magit lolcat howdoyou git-walktree git-timemachine git-messenger flycheck fira-code-mode esh-autosuggest column-enforce-mode clean-aindent-mode bury-successful-compilation bifocal auto-compile anzu ag))
  '(ring-bell-function 'ignore))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
