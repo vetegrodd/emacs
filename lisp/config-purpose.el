@@ -36,6 +36,7 @@
   :config
   (purpose-mode)
   (add-to-list 'purpose-user-mode-purposes '(term-mode . terminal))
+  (add-to-list 'purpose-user-mode-purposes '(vterm-mode . terminal))
   (add-to-list 'purpose-user-mode-purposes '(prog-mode . coding))
   (add-to-list 'purpose-user-mode-purposes '(compilation-mode . messages))
   (add-to-list 'purpose-user-mode-purposes '(logview-mode . log))

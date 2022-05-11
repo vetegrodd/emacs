@@ -20,77 +20,56 @@
 
 ;;; Commentary:
 
-;; ccls
+;; lsp
 
 ;;; Code:
 
 (use-package lsp-mode
-  :hook (prog-mode . lsp)
-  :commands lsp
-  :custom
-  (lsp-file-watch-threshold nil))
+  :hook ((c-mode c++-mode d-mode go-mode js-mode kotlin-mode python-mode typescript-mode
+          vala-mode web-mode)
+	 . lsp)
+  :init
+  (setq lsp-keymap-prefix "H-l"
+	lsp-rust-analyzer-proc-macro-enable t)
+  :config
+  (lsp-enable-which-key-integration t))
 
+(use-package lsp-ui
+  :init
+  (setq lsp-ui-doc-position 'at-point
+	lsp-ui-doc-show-with-mouse nil)
+  :bind (("C-c d" . lsp-ui-doc-show)
+	 ("C-c I" . lsp-ui-imenu)))
+
+(use-package flycheck
+  :defer)
+
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c++-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
+;; if you are helm user
+;(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+;;(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+;;(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-         (lambda () (require 'ccls) (lsp))))
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-(require 'lsp-ui-imenu)
-
-(setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
-
-
-(defun ccls/callee () (interactive) (lsp-ui-peek-find-custom "$ccls/call" '(:callee t)))
-(defun ccls/caller () (interactive) (lsp-ui-peek-find-custom "$ccls/call"))
-(defun ccls/vars (kind) (lsp-ui-peek-find-custom "$ccls/vars" `(:kind ,kind)))
-(defun ccls/base (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels)))
-(defun ccls/derived (levels) (lsp-ui-peek-find-custom "$ccls/inheritance" `(:levels ,levels :derived t)))
-(defun ccls/member (kind) (interactive) (lsp-ui-peek-find-custom "$ccls/member" `(:kind ,kind)))
-
-;; References w/ Role::Role
-(defun ccls/references-read () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-    (plist-put (lsp--text-document-position-params) :role 8)))
-
-;; References w/ Role::Write
-(defun ccls/references-write ()
-  (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :role 16)))
-
-;; References w/ Role::Dynamic bit (macro expansions)
-(defun ccls/references-macro () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :role 64)))
-
-;; References w/o Role::Call bit (e.g. where functions are taken addresses)
-(defun ccls/references-not-call () (interactive)
-  (lsp-ui-peek-find-custom "textDocument/references"
-   (plist-put (lsp--text-document-position-params) :excludeRole 32)))
-
-;; ccls/vars ccls/base ccls/derived ccls/members have a parameter while others are interactive.
-;; (ccls/base 1) direct bases
-;; (ccls/derived 1) direct derived
-;; (ccls/member 2) => 2 (Type) => nested classes / types in a namespace
-;; (ccls/member 3) => 3 (Func) => member functions / functions in a namespace
-;; (ccls/member 0) => member variables / variables in a namespace
-;; (ccls/vars 1) => field
-;; (ccls/vars 2) => local variable
-;; (ccls/vars 3) => field or local variable. 3 = 1 | 2
-;; (ccls/vars 4) => parameter
-
-;; References whose filenames are under this project
-(require 'lsp-ui-peek)
-(lsp-ui-peek-find-references nil (list :folders (vector (projectile-project-root))))
-
-(setq ccls-sem-highlight-method 'font-lock)
-;; alternatively, (setq ccls-sem-highlight-method 'overlay)
-
-;; For rainbow semantic highlighting
-(ccls-use-default-rainbow-sem-highlight)
-
+;; optional if you want which-key integration
+(use-package which-key
+    :config
+    (which-key-mode))
 
 (provide 'config-lsp)
 ;;; config-lsp.el ends here

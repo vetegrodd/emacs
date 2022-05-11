@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -37,6 +40,8 @@
 (setq use-package-always-ensure t)
 
 (tool-bar-mode -1)
+
+(use-package async)
 
 (use-package paradox
   :custom
@@ -75,7 +80,7 @@
       (require (intern host-config))))
 
 (add-hook 'c-mode-common-hook
-          '(lambda ()
+          #'(lambda ()
              (setq indent-tabs-mode nil)
              (define-key c-mode-base-map "\C-m" 'c-context-line-break)
              (define-key c-mode-base-map [M-up] 'c-beginning-of-statement)
@@ -105,16 +110,7 @@
 
 (use-package yasnippet)
 
-(use-package projectile
-  :config
-
-  (defun projectile-project-find-function (dir)
-    (let* ((root (projectile-project-root dir)))
-      (and root (cons 'transient root))))
-
-  (with-eval-after-load 'project
-    (add-to-list 'project-find-functions 'projectile-project-find-function))
-  )
+(require 'config-lsp)
 
 ;;; company elisp
 (add-hook 'emacs-lisp-mode-hook #'company-mode)
@@ -245,23 +241,8 @@
 
 (require 'config-purpose)
 
+(use-package demap)
+
 (require 'gyp-mode)
 
-;;; Do not stage stuff following this line.
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(compilation-scroll-output t)
- '(package-selected-packages
-   '(zygospore yasnippet ws-butler window-purpose web-mode use-package undo-tree terminal-toggle selectrum-prescient pyvenv persp-projectile paradox modern-cpp-font-lock magit lolcat howdoyou git-walktree git-timemachine git-messenger flycheck fira-code-mode esh-autosuggest column-enforce-mode clean-aindent-mode bury-successful-compilation bifocal auto-compile anzu ag))
- '(ring-bell-function 'ignore))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 ;;; init.el ends here

@@ -17,3 +17,7 @@ timelog
 logview-cache.extmap
 .cache
 var
+/custom.el
+/eshell
+/.dap-breakpoints
+/eln-cache
