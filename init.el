@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
 (load custom-file 'noerror)
 
 (require 'package)
@@ -50,7 +50,7 @@
   (paradox-github-token t))
 
 (add-to-list 'load-path
-	     (concat user-emacs-directory
+	     (concat (expand-file-name user-emacs-directory)
 		     (convert-standard-filename "lisp/")))
 
 ;;; fira
@@ -113,7 +113,9 @@
 (require 'config-lsp)
 
 ;;; company elisp
-(add-hook 'emacs-lisp-mode-hook #'company-mode)
+(use-package company
+  :hook
+  ((emacs-lisp-mode . company-mode)))
 
 ;;; git
 (use-package magit
