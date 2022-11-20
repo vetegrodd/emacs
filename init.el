@@ -108,7 +108,10 @@
   :hook
   ((elisp-mode . flycheck-mode)))
 
-(use-package yasnippet)
+(use-package yasnippet
+  :config
+  (yas-global-mode +1)
+  )
 
 (require 'config-lsp)
 
@@ -137,6 +140,8 @@
 ;;; term
 (use-package bifocal
   :hook (term-mode . bifocal-mode))
+
+(use-package vterm)
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
