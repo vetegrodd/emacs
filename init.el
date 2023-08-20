@@ -43,12 +43,6 @@
 
 (use-package async)
 
-(use-package paradox
-  :custom
-  (paradox-execute-asynchronously t)
-  (paradox-spinner-type 'moon)
-  (paradox-github-token t))
-
 (add-to-list 'load-path
 	     (concat (expand-file-name user-emacs-directory)
 		     (convert-standard-filename "lisp/")))
