@@ -47,6 +47,13 @@
 	     (concat (expand-file-name user-emacs-directory)
 		     (convert-standard-filename "lisp/")))
 
+(require 'time)
+(use-package time
+  :custom
+  (display-time-24hr-format t)
+  :config
+  (display-time-mode))
+
 ;;; fira
 (use-package fira-code-mode
   :config (global-fira-code-mode))
@@ -56,25 +63,15 @@
                      :height 80
                      :weight 'normal
                      :width 'normal
-   		    :slant 'normal)
+ 		     :slant 'normal)
 (set-frame-font "Fira Code Retina" nil t)
 
 ;; EXWM
 (if (string= (getenv "EXWM") "true")
     (require 'config-exwm))
 
-;; Host config
-(let* ((host-config (concat "config-" (system-name)))
-       (file-name (concat
-		   user-emacs-directory
-		   (convert-standard-filename "lisp/")
-		   host-config
-		   ".el")))
-  (if (file-exists-p file-name)
-      (require (intern host-config))))
-
 (add-hook 'c-mode-common-hook
-          #'(lambda ()
+          '(lambda ()
              (setq indent-tabs-mode nil)
              (define-key c-mode-base-map "\C-m" 'c-context-line-break)
              (define-key c-mode-base-map [M-up] 'c-beginning-of-statement)
@@ -87,13 +84,22 @@
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
-(with-eval-after-load 'projectile
-  (setq projectile-project-root-files-top-down-recurring
-        (append '("compile_commands.json"
-                  ".ccls")
-                projectile-project-root-files-top-down-recurring)))
+  (with-eval-after-load 'projectile
+    (setq projectile-project-root-files-top-down-recurring
+          (append '("compile_commands.json"
+                    ".ccls")
+                  projectile-project-root-files-top-down-recurring)))
+
+  (defun projectile-project-find-function (dir)
+    (let* ((root (projectile-project-root dir)))
+      (and root (cons 'transient root))))
+
+  (with-eval-after-load 'project
+    (add-to-list 'project-find-functions 'projectile-project-find-function))
+)
+
 
 ;; programming
 (use-package flycheck
@@ -105,9 +111,7 @@
 (use-package yasnippet
   :config
   (yas-global-mode +1)
-  )
-
-(require 'config-lsp)
+)
 
 ;;; company elisp
 (use-package company
@@ -199,6 +203,9 @@
   :config
   (global-undo-tree-mode 1))
 
+(use-package tern
+  :hook (js-mode . tern-mode))
+
 (use-package modern-cpp-font-lock
   :config
   (modern-c++-font-lock-global-mode t))
@@ -245,5 +252,15 @@
 (use-package demap)
 
 (require 'gyp-mode)
+
+;; Host config
+(let* ((host-config (concat "config-" (system-name)))
+       (file-name (concat
+		   user-emacs-directory
+		   (convert-standard-filename "lisp/")
+		   host-config
+		   ".el")))
+  (if (file-exists-p file-name)
+      (require (intern host-config))))
 
 ;;; init.el ends here

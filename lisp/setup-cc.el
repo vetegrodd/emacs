@@ -6,17 +6,6 @@
 
 ;; all the configuration for C/C++ projects
 
-;; cmake-mode: major mode for cmake files
-;; https://gitlab.kitware.com/cmake/cmake/blob/master/Auxiliary/cmake-mode.el
-(use-package cmake-mode)
-
-;; cmake-font-lock: emacs font lock rules for CMake
-;; https://github.com/Lindydancer/cmake-font-lock
-(use-package cmake-font-lock
-  :config
-  (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
-  (add-hook 'cmake-mode-hook 'cmake-font-lock-activate))
-
 ;; adds font-lock highlighting for modern C++ upto C++17
 ;; https://github.com/ludwigpacifici/modern-cpp-font-lock
 (use-package modern-cpp-font-lock
