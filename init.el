@@ -113,6 +113,10 @@
   (yas-global-mode +1)
 )
 
+(use-package yaml-mode)
+
+(require 'config-lsp)
+
 ;;; company elisp
 (use-package company
   :hook
