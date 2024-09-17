@@ -31,11 +31,11 @@
   (require 'exwm-config)
   (require 'exwm-floating)
   :config
-  (exwm-config-default)
+;  (exwm-systemtray-mode 1)
   (exwm-enable)
   (setenv "EXWM" nil)
   :custom
-  (exwm-workspace-number 5)
+  (exwm-workspace-number 4)
   :hook
   (
    (exwm-manage-finish
@@ -47,7 +47,7 @@
 	(exwm-floating-move 700 400)
 	(exwm-input-toggle-keyboard exwm--id))
       (when (and exwm-class-name
-       		 (string= exwm-class-name "Google-chrome"))
+       		 (string= exwm-class-name "firefox"))
 	(exwm-workspace-move-window 3)
        	(exwm-input-toggle-keyboard exwm--id))
       (when (and exwm-title
@@ -60,14 +60,18 @@
       (when (and exwm-class-name
 		 (string= exwm-class-name "Code"))
 	(exwm-input-toggle-keyboard exwm--id))
-      ))))
+      ))
+   (exwm-update-class
+    .
+    (lambda ()
+      (exwm-workspace-rename-buffer exwm-class-name)))))
 
 (defun exwm-next-ws()
   "Switch workspace."
   (interactive)
   (let ((curspace exwm-workspace-current-index))
     (exwm-workspace-switch
-     (cond ((= curspace 4) 0)
+     (cond ((= curspace (- exwm-workspace-number 1)) 0)
            (t (1+ curspace))))))
 
 (defun local-emacs()

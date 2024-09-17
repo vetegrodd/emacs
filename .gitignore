@@ -21,3 +21,4 @@ var
 /eshell
 /.dap-breakpoints
 /eln-cache
+/session*
